@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 ROOT_DIR=$(pwd)
 VERSION=_v0
@@ -24,4 +24,12 @@ fi
 
 # starts an image
 echo "Starting image"
-docker run -it --rm -v $ROOT_DIR/src:/my_source_code $docker_name
+docker run -it \
+    --user ros \
+    --network=host \
+    --ipc=host \
+    --rm \
+    -v $ROOT_DIR/src:/my_source_code \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    --env=DISPLAY \
+    $docker_name
