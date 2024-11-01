@@ -5,7 +5,6 @@ RUN apt-get update \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
-
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -21,6 +20,12 @@ RUN apt-get update \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+    && apt-get install -y jstest-gtk\
+    usbutils\
+    xxd\
+    && rm -rf /ver/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 COPY bashrc /home/${USERNAME}/.bashrc

@@ -31,5 +31,8 @@ docker run -it \
     --rm \
     -v $ROOT_DIR/src:/my_source_code \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    -v /dev/input:/dev/input \
+    -v /dev/bus:/dev/bus \
+    --device-cgroup-rule='c *:* rmw' \
     --env=DISPLAY \
     $docker_name
