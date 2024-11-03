@@ -1,0 +1,67 @@
+# Docker Compose file for AGH Marines ROS2 environment developement
+#
+# Usage:
+#
+# To build the images:
+#   docker compose -f compose.dev.yml build
+#
+# To start up containers:
+#   docker compose -f compose.dev.yml up [service_name] -d
+#
+# To list started containers:
+#   docker compose -f compose.dev.yml ps
+#
+# To open an interactive shell to a running container:
+#   docker exec -it <container_name> bash
+
+version: '3.8'
+name: "controller"
+services:
+  controller:
+
+    build: 
+      context: ./controller
+      dockerfile: Dockerfile.controller
+    
+    command: bash
+    tty: true
+    user: ros
+
+    environment:
+      - DISPLAY=:0
+      - ROS_MASTER_URI=http://controller:11311
+
+    network_mode: 'host'
+
+    ports:
+      - "11311:11311"
+
+    volumes:
+      - ./controller/ws:/ws
+      - /dev/bus:/dev/bus
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    
+
+
+  jet_dev:
+    build:
+      context: ./jet
+      dockerfile: Dockerfile.jet_dev
+
+    command: bash
+    tty: true
+    user: jet
+
+    environment:
+      - ROS_MASTER_URI=http://controller:11311
+
+    network_mode: "bridge"
+
+    volumes:
+      - ./jet/ws:/ws
+      - /dev/bus:/dev/bus
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
