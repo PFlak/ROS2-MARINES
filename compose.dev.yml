@@ -37,7 +37,7 @@ services:
       - "11311:11311"
 
     volumes:
-      - ./controller/ws:/ws
+      - ./controller/ws:/ros_ws
       - /dev/bus:/dev/bus
 
     device_cgroup_rules:
@@ -60,7 +60,7 @@ services:
     network_mode: "bridge"
 
     volumes:
-      - ./jet/ws:/ws
+      - ./jet/ws:/ros_ws/
       - /dev/bus:/dev/bus
 
     device_cgroup_rules:
