@@ -32,13 +32,7 @@ services:
     user: ros
 
     environment:
-      - DISPLAY=:0
-      - ROS_MASTER_URI=http://controller:11311
-
-    network_mode: 'bridge'
-
-    ports:
-      - "11311:11311"
+      - DISPLAY=${DISPLAY}
 
     volumes:
       - ./controller/ws:/ws
@@ -47,8 +41,9 @@ services:
 
     device_cgroup_rules:
       - 'c *:* rmw'
-    
 
+    networks:
+      - controller-net
 
   jet:
     build:
@@ -60,10 +55,7 @@ services:
     user: jet
 
     environment:
-      - DISPLAY=:0
-      - ROS_MASTER_URI=http://controller:11311
-
-    network_mode: "bridge"
+      - DISPLAY=${DISPLAY}
 
     volumes:
       - ./jet/ws:/ws
@@ -72,3 +64,31 @@ services:
 
     device_cgroup_rules:
       - 'c *:* rmw'
+
+    networks:
+      - jet-net
+
+
+networks:
+
+  controller-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface that connects to jetson eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between desktop and jetson "x.x.x.x/m"
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+
+  jet-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface that connects to jetson eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between desktop and jetson "x.x.x.x/m"
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+
+    
