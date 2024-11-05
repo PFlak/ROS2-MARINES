@@ -1,0 +1,51 @@
+{
+    "name": "ROS2MARINES DEV",
+    "remoteUser": "dev",
+    "build": {
+        "dockerfile": "Dockerfile.devcontainer",
+        "args": {
+            "USERNAME": "dev",
+            "GID": "1000",
+            "UID": "1000"
+        }
+    },
+    "customizations": {
+      "vscode": {
+          "extensions": [
+              "ms-python.python",
+              "charliermarsh.ruff",
+              "ms-vscode.cpptools-extension-pack",
+              "ms-iot.vscode-ros",
+              "smilerobotics.urdf",
+              "redhat.vscode-xml",
+              "tamasfe.even-better-toml",
+              "timonwong.shellcheck",
+              "yzhang.markdown-all-in-one",
+              "streetsidesoftware.code-spell-checker"
+          ],
+          "settings": {
+              "files.associations": {
+                  "*.rviz": "yaml",
+                  "*.srdf": "xml",
+                  "*.urdf": "xml",
+                  "*.xacro": "xml"
+              },
+              "editor.formatOnSave": true
+          }
+      }
+    },
+    "workspaceFolder": "/home/dev/ros2_ws",
+    "workspaceMount": "source=${localWorkspaceFolder}/controller/ws,target=/home/dev/ros2_ws/src/controller,type=bind",
+    "mounts": [
+        "source=${localWorkspaceFolder}/jet/ws,target=/home/dev/ros2_ws/src/jet,type=bind",
+        "source=/dev,target=/dev,type=bind",
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+    ],
+    "runArgs": [
+        "--net=host",
+        "--device-cgroup-rule", "c *:* rmw"
+    ],
+    "containerEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}"
+    }
+}

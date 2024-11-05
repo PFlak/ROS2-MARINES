@@ -1,0 +1,94 @@
+# Docker Compose file for AGH Marines ROS2
+#
+# Usage:
+
+# To build the images:
+#   docker compose -f compose.dev.yml build
+
+# To run jet service on nvidia jetson you need to make context first:configs:
+#   docker context create <context_name> --docker "host=ssh://username@remote-host"
+#   docker context use <context_name>
+
+# To start up containers:
+#   docker compose -f compose.dev.yml up [service_name] -d
+
+# To list started containers:
+#   docker compose -f compose.dev.yml ps
+
+# To open an interactive shell to a running container:
+#   docker exec -it <container_name> bash
+
+version: '3.8'
+name: "agh-marines-ros2"
+services:
+  controller:
+
+    build: 
+      context: ./controller
+      dockerfile: Dockerfile.controller
+    
+    command: bash
+    tty: true
+    user: ros
+
+    environment:
+      - DISPLAY=${DISPLAY}
+
+    volumes:
+      - ./controller/ws:/ws
+      - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
+
+    networks:
+      - controller-net
+
+  jet:
+    build:
+      context: ./jet
+      dockerfile: Dockerfile.jet
+    runtime: nvidia
+    command: bash
+    tty: true
+    user: jet
+
+    environment:
+      - DISPLAY=${DISPLAY}
+
+    volumes:
+      - ./jet/ws:/ws
+      - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
+
+    networks:
+      - jet-net
+
+
+networks:
+
+  controller-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface that connects to jetson eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between desktop and jetson "x.x.x.x/m"
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+
+  jet-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface that connects to jetson eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between desktop and jetson "x.x.x.x/m"
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+
+    
