@@ -15,9 +15,9 @@
 #   docker exec -it <container_name> bash
 
 version: '3.8'
-name: "controller"
+name: "agh-marines-ros2-dev"
 services:
-  controller:
+  controller_dev:
 
     build: 
       context: ./controller
@@ -37,8 +37,8 @@ services:
       - "11311:11311"
 
     volumes:
-      - ./controller/ws:/ros_ws
-      - /dev/bus:/dev/bus
+      - ./controller/controller-packages:/ros2_ws/src
+      - /dev:/dev
 
     device_cgroup_rules:
       - 'c *:* rmw'
@@ -60,8 +60,8 @@ services:
     network_mode: "bridge"
 
     volumes:
-      - ./jet/ws:/ros_ws/
-      - /dev/bus:/dev/bus
+      - ./jet/jet-packages:/ros2_ws/src/
+      - /dev:/dev
 
     device_cgroup_rules:
       - 'c *:* rmw'

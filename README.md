@@ -3,6 +3,10 @@
 
 The project architecture is based on Docker, which facilitates rapid deployment and allows for operation in nearly any configuration. To ensure proper control of the robot, the controlling computer must maintain a connection with the Nvidia Jetson. This setup maximizes flexibility and responsiveness in various operational environments, making it suitable for diverse applications in robotics and automation.
 
+Project has two submodules with ROS2 packages:
+- [Marines-Controll-Packages](https://github.com/PFlak/Marines-Controller-Packages)
+- [Marines-Jet-Packages](https://github.com/PFlak/Marines-Jet-Packages)
+
 ### Example connection
 ![example connection](./images/prod_connection.png)
 
@@ -25,8 +29,8 @@ Devices are availability depends on network settings. In general devices in the 
 │   ├── bashrc # Bash file executed after starting container 
 │   ├── Dockerfile.controller
 │   ├── entrypoint.sh
-│   └── ws
-│       | # ROS Workspace for controller packages
+│   └── controller-packages
+│       | # Git submodule for controller packages
 |       |
 |      ...
 |
@@ -39,25 +43,30 @@ Devices are availability depends on network settings. In general devices in the 
     │   ├── ros2_build.sh
     │   ├── ros2_install.sh
     │   └── ros2_test.sh
-    └── ws
-        | # ROS Workspace for jet packages
+    └── jet-packages
+        | # Git submodule for jet packages
         |
        ...
 ```
 
-`controller/ws` and `jet/ws` are mounted in production containers on
+`controller/controller-packages` and `jet/jet-packages` are mounted in production containers on
 ```bash
-/ros_ws
+/ros2_ws/src
 ```
 And while using devcontainers
 ```bash
-/home/$USER/ros_ws/src/controller
+/home/$USER/ros2_ws/src/controller
 # AND
-/home/$USER/ros_ws/src/jet
+/home/$USER/ros2_ws/src/jet
 ```
 
 
 ## Setting up environment
+
+Init submodules:
+```bash
+git submodule update --init --recursive
+```
 
 ### Requirements
 
@@ -92,6 +101,42 @@ docker context create \
 ```
 
 ### Production deployment
+
+Edit network configuration in `compose.prod.yml`
+
+```yml
+networks:
+
+  controller-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface
+                                   # that connects to jetson
+                                   # eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between 
+                                   # desktop and jetson "x.x.x.x/m"
+
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+
+  jet-net:
+    driver: macvlan
+    driver_opts:
+      parent: <interface>          # desktop interface 
+                                   # that connects to jetson
+                                   # eg. eth0
+    ipam:
+      config:
+      - subnet: "<x.x.x.x/mask>"   # subnet for connection between 
+                                   # desktop and jetson "x.x.x.x/m"
+
+        gateway: "<x.x.x.x>"       # gateway in subnet "x.x.x.x"
+
+        ip_range: "<x.x.x.x/mask>" # range for ip addressing "x.x.x.x/m"
+```
 
 After establishing key-based authentication on ssh and creating docker context in `/path/to/ROS2-MARINES/` you should run:
 ```bash
@@ -135,9 +180,6 @@ docker compose -f compose.prod.yml down controller
 docker context use <context_name>
 docker compose -f compose.prod.yml down jet
 ```
- 
-## ROS Nodes
-><span style="color:darkorchid; font-style:italic">ToDo...</span>
 
 
 

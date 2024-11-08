@@ -35,7 +35,7 @@ services:
       - DISPLAY=${DISPLAY}
 
     volumes:
-      - ./controller/ws:/ws
+      - ./controller/controller-packages:/ros2_ws/src
       - /dev:/dev
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
 
@@ -58,7 +58,7 @@ services:
       - DISPLAY=${DISPLAY}
 
     volumes:
-      - ./jet/ws:/ws
+      - ./jet/jet-packages:/ros2_ws/src
       - /dev:/dev
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
 

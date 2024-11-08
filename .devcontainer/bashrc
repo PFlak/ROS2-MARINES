@@ -1,2 +1,6 @@
 source /opt/ros/humble/setup.bash
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
+cd /home/dev/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
+cd
