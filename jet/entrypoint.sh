@@ -27,5 +27,8 @@ fi
 echo "ROS_DISTRO $ROS_DISTRO"
 echo "ROS_ROOT   $ROS_ROOT"
 
+source ~/.bashrc
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p image_size:="[640,480]" -p camera_frame_id:=camera_optical_link -p video_device:="/dev/video2" & disown
+
 export AMENT_PREFIX_PATH=${AMENT_PREFIX_PATH}:${CMAKE_PREFIX_PATH}
 exec "$@"

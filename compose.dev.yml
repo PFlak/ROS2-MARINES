@@ -55,6 +55,7 @@ services:
     user: jet
 
     environment:
+      - DISPLAY=:0
       - ROS_MASTER_URI=http://controller:11311
 
     network_mode: "bridge"
@@ -62,6 +63,7 @@ services:
     volumes:
       - ./jet/jet-packages:/ros2_ws/src/
       - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix
 
     device_cgroup_rules:
       - 'c *:* rmw'

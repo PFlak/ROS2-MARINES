@@ -40,6 +40,11 @@ RUN apt-get update \
     iputils-ping \
     && rm -rf /ver/lib/apt/lists/*
 
+# Download camera node and configurate it
+RUN apt-get update \
+    && apt install -y v4l-utils ros-humble-v4l2-camera ros-humble-image-transport-plugins \
+    && usermod -aG video jet
+
 USER root
 
 RUN mkdir -p /${ROS_WS}/src \
