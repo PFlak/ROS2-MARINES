@@ -39,6 +39,7 @@ services:
     volumes:
       - ./controller/controller-packages:/ros2_ws/src
       - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
 
     device_cgroup_rules:
       - 'c *:* rmw'
