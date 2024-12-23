@@ -181,5 +181,78 @@ docker context use <context_name>
 docker compose -f compose.prod.yml down jet
 ```
 
+---
 
+### Networking Configuration Overview
 
+You can customize your network setup as needed, but there are recommended configurations for optimal performance and reliability.
+
+#### Basic Network Setup
+
+A basic network configuration is illustrated in the [Example Connection](#example-connection) section. This setup is straightforward yet dependable.
+
+##### Jetson Configuration
+
+Physical Ethernet Address: `10.10.10.10.X/24`
+
+Docker Container Address Range: `10.10.10.A/29`
+
+>[!NOTE]
+>
+> `A` represents the address range assigned to Docker containers, defined by the subnet `mask` (in this case, 29). This specifies the range Docker will allocate to containers.
+>
+> If you are uncertain how to adjust the range for your needs, use an online subnet calculator like [this one](https://jodies.de/ipcalc?host=10.10.10.96&mask1=29&mask2=).
+>
+>Ensure that `X` is not within the same range as `A`.
+
+###### Controller Configuration
+
+Physical Ethernet Address: `10.10.10.Y/24`
+
+Docker Container Address Range: `10.10.10.B/29`
+
+###### Pros and Cons
+
+ - Advantages: Both devices recognize each other as part of the same LAN, simplifying direct communication. This setup is ideal for scenarios where you connect to the Jetson via SSH, ensuring Docker containers run without connectivity issues.
+
+- Disadvantages: Containers on both the controller and Jetson lack direct internet access. The Jetson will require additional internet connectivity for example, via Wi-Fi to build images or download necessary packages.
+
+#### Internet Access for Underwater Operation
+
+This configuration is designed for competition scenarios where the Nvidia Jetson is enclosed in a waterproof tube and operates underwater without internet access. The solution involves enabling NAT (Network Address Translation) on the controller's wireless port.
+
+###### NAT Configuration Steps
+
+Enable Packet Forwarding:
+Edit the `/etc/ufw/sysctl.conf` file:
+
+```bash
+# Uncomment this to allow this host to route packets between interfaces
+net/ipv4/ip_forward=1
+#net/ipv6/conf/default/forwarding=1
+#net/ipv6/conf/all/forwarding=1
+```
+
+Set Default Forwarding Policy:
+Edit the `/etc/default/ufw` file:
+
+```bash
+DEFAULT_FORWARD_POLICY="ACCEPT"
+```
+
+Configure NAT Rules:
+Edit the `/etc/ufw/before.rules` file to add the following NAT configuration:
+
+```bash
+*nat
+:POSTROUTING ACCEPT [0:0]
+
+-A POSTROUTING -o <WIRELESS INTERFACE> -j MASQUERADE
+
+COMMIT
+```
+
+After completing these steps, the Nvidia Jetson will have internet access through the controller's wireless connection.
+
+>[!NOTE]
+> To enable internet access for Docker containers, specify the gateway as 10.10.10.Y based on the Basic Network Setup.
