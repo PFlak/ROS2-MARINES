@@ -12,58 +12,39 @@
     "customizations": {
       "vscode": {
           "extensions": [
-              "ms-python.python",
-              "charliermarsh.ruff",
-              "ms-vscode.cpptools-extension-pack",
-              "ms-iot.vscode-ros",
-              "smilerobotics.urdf",
-              "redhat.vscode-xml",
-              "tamasfe.even-better-toml",
-              "timonwong.shellcheck",
-              "yzhang.markdown-all-in-one",
-              "streetsidesoftware.code-spell-checker"
-          ],
-          "settings": {
-              "files.associations": {
-                  "*.rviz": "yaml",
-                  "*.srdf": "xml",
-                  "*.urdf": "xml",
-                  "*.xacro": "xml"
-              },
-              "editor.formatOnSave": true,
-              "python.autoComplete.extraPaths": [
-                        "/opt/ros/humble/lib/python3.10/site-packages",
-                        "/opt/ros/humble/local/lib/python3.10/site-packages"
-              ],
-              "python.analysis.extraPaths": [
-                        "/opt/ros/humble/lib/python3.10/site-packages",
-                        "/opt/ros/humble/local/lib/python3.10/site-packages"
-              ],
-              "C_Cpp.default.browse.databaseFilename": "${default}",
-              "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
-              "C_Cpp.default.includePath": [
-                "/opt/ros/humble/include/**",
-                "/usr/include"
-              ],
-              "C_Cpp.default.intelliSenseMode": "gcc-x64",
-              "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-              "C_Cpp.default.cStandard": "gnu11",
-              "C_Cpp.default.cppStandard": "c++14"
-          },
+            "althack.ament-task-provider",
+            "betwo.b2-catkin-tools",
+            "DotJoshJohnson.xml",
+            "ms-azuretools.vscode-docker",
+            "ms-iot.vscode-ros",
+            "ms-python.python",
+            "ms-vscode.cpptools",
+            "redhat.vscode-yaml",
+            "smilerobotics.urdf",
+            "streetsidesoftware.code-spell-checker",
+            "twxs.cmake",
+            "yzhang.markdown-all-in-one",
+            "zachflower.uncrustify"
+          ]
       }
     },
-    "workspaceFolder": "/home/dev/ros2_ws",
+    "workspaceFolder": "/home/dev/ros2_ws/src",
     "workspaceMount": "source=${localWorkspaceFolder}/controller/controller-packages,target=/home/dev/ros2_ws/src/controller,type=bind",
     "mounts": [
         "source=${localWorkspaceFolder}/jet/jet-packages,target=/home/dev/ros2_ws/src/jet,type=bind",
         "source=/dev,target=/dev,type=bind",
-        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+        "source=${localWorkspaceFolder}/.vscode,target=/home/dev/ros2_ws/src/.vscode,type=bind"
     ],
     "runArgs": [
         "--net=host",
-        "--device-cgroup-rule", "c *:* rmw"
+        "--device-cgroup-rule", "c *:* rmw",
+        "--cap-add=SYS_PTRACE",
+        "--security-opt=seccomp:unconfined",
+		"--security-opt=apparmor:unconfined"
     ],
     "containerEnv": {
-        "DISPLAY": "${localEnv:DISPLAY}"
+        "DISPLAY": "${localEnv:DISPLAY}",
+        "PYTHONPATH": "src:install/lib/python3.10/site-packages"
     }
 }
