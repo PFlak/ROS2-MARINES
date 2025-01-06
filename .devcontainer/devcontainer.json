@@ -30,8 +30,26 @@
                   "*.urdf": "xml",
                   "*.xacro": "xml"
               },
-              "editor.formatOnSave": true
-          }
+              "editor.formatOnSave": true,
+              "python.autoComplete.extraPaths": [
+                        "/opt/ros/humble/lib/python3.10/site-packages",
+                        "/opt/ros/humble/local/lib/python3.10/site-packages"
+              ],
+              "python.analysis.extraPaths": [
+                        "/opt/ros/humble/lib/python3.10/site-packages",
+                        "/opt/ros/humble/local/lib/python3.10/site-packages"
+              ],
+              "C_Cpp.default.browse.databaseFilename": "${default}",
+              "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
+              "C_Cpp.default.includePath": [
+                "/opt/ros/humble/include/**",
+                "/usr/include"
+              ],
+              "C_Cpp.default.intelliSenseMode": "gcc-x64",
+              "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+              "C_Cpp.default.cStandard": "gnu11",
+              "C_Cpp.default.cppStandard": "c++14"
+          },
       }
     },
     "workspaceFolder": "/home/dev/ros2_ws",
