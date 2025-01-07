@@ -28,7 +28,7 @@
           ]
       }
     },
-    "workspaceFolder": "/home/dev/ros2_ws/src",
+    "workspaceFolder": "/home/dev/ros2_ws",
     "workspaceMount": "source=${localWorkspaceFolder}/controller/controller-packages,target=/home/dev/ros2_ws/src/controller,type=bind",
     "mounts": [
         "source=${localWorkspaceFolder}/jet/jet-packages,target=/home/dev/ros2_ws/src/jet,type=bind",

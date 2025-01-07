@@ -39,6 +39,12 @@ RUN apt-get update \
     iputils-ping \
     && rm -rf /ver/lib/apt/lists/*
 
+# Download ROS2 packages
+RUN apt-get update \
+    && apt-get install -y \
+    ros-humble-joint-state-publisher \
+    ros-humble-joint-state-publisher-gui
+
 USER root
 
 RUN mkdir -p /home/$USERNAME/ros2_ws/src
@@ -46,6 +52,7 @@ RUN chown -R ${USERNAME}:root /home/${USERNAME}/ros2_ws
 WORKDIR /home/$USERNAME/ros2_ws/src
 
 RUN echo 'source /opt/ros/'$ROS_DISTRO'/setup.bash' >> /home/$USERNAME/.bashrc \
+    colcon build \
     && echo 'source /home/'$USERNAME'/ros2_ws/install/setup.bash' >> /home/$USERNAME/.bashrc
 
 COPY ./entrypoint.sh /entrypoint.sh
