@@ -37,6 +37,7 @@ RUN apt-get update \
     xxd \
     net-tools \
     iputils-ping \
+    fzf \
     && rm -rf /ver/lib/apt/lists/*
 
 # Download ROS2 packages
@@ -47,13 +48,18 @@ RUN apt-get update \
 
 USER root
 
+RUN git clone https://github.com/kimushun1101/ros2-aliases.git /home/dev/ros2-aliases 
+COPY ./ros2aliases.env /home/dev/ros2-aliases/.env
+
+
+
 RUN mkdir -p /home/$USERNAME/ros2_ws/src
 RUN chown -R ${USERNAME}:root /home/${USERNAME}/ros2_ws
 WORKDIR /home/$USERNAME/ros2_ws/src
 
 RUN echo 'source /opt/ros/'$ROS_DISTRO'/setup.bash' >> /home/$USERNAME/.bashrc \
-    colcon build \
-    && echo 'source /home/'$USERNAME'/ros2_ws/install/setup.bash' >> /home/$USERNAME/.bashrc
+    && echo 'source /home/'$USERNAME'/ros2_ws/install/setup.bash' >> /home/$USERNAME/.bashrc\
+    && echo 'source /home/'$USERNAME'/ros2-aliases/ros2_aliases.bash' >> /home/$USERNAME/.bashrc
 
 COPY ./entrypoint.sh /entrypoint.sh
 

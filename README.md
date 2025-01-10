@@ -89,7 +89,13 @@ If VS Code Extensions are installed, after cloning the repo we can start working
 >Dev Containers: Reopen in Container
 ```
 
-Working in devcontainers doesn't require connection to Nvidia Jetson
+Working in devcontainers dont't require connection to Nvidia Jetson
+
+There are provided external aliases in Devcontainers for working with ROS 2 Humble, use:
+```bash
+rahelp
+```
+For more information.
 
 ### SSH
 Before we can use Nvidia Jetson Orin Nano as the driver of a robot, we should establish ssh [key-based authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
