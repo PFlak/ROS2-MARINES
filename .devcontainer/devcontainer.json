@@ -41,7 +41,8 @@
         "--device-cgroup-rule", "c *:* rmw",
         "--cap-add=SYS_PTRACE",
         "--security-opt=seccomp:unconfined",
-		"--security-opt=apparmor:unconfined"
+		"--security-opt=apparmor:unconfined",
+        "--privileged"
     ],
     "containerEnv": {
         "DISPLAY": "${localEnv:DISPLAY}",

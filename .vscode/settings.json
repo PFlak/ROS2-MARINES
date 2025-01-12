@@ -72,4 +72,5 @@
         ".devcontainer/devcontainer.json"
     ],
     "ament-task-provider.envSetup": "source /opt/ros/humble/setup.bash",
+    "cmake.sourceDirectory": "C:/dev/ROS2-MARINES/jet/jet-packages/narval_thruster_manager",
 }
