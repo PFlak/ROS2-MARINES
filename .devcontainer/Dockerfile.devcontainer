@@ -45,7 +45,8 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y \
     ros-humble-joint-state-publisher \
-    ros-humble-joint-state-publisher-gui
+    ros-humble-joint-state-publisher-gui\
+    ros-humble-tf-transformations
 
 USER root
 
