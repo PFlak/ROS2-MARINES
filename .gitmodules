@@ -1,6 +1,8 @@
 [submodule "controller/controller-packages"]
 	path = controller/controller-packages
 	url = https://github.com/PFlak/Marines-Controller-Packages.git
+	branch = main
 [submodule "jet/jet-packages"]
 	path = jet/jet-packages
 	url = https://github.com/PFlak/Marines-Jet-Packages.git
+	branch = main
