@@ -53,7 +53,39 @@ USER root
 RUN git clone https://github.com/kimushun1101/ros2-aliases.git /home/dev/ros2-aliases 
 COPY ./ros2aliases.env /home/dev/ros2-aliases/.env
 
+# install NVIDIA software
+RUN apt-get update \
+ && apt-get -y --quiet --no-install-recommends install \
+    libglvnd0 \
+    libgl1 \
+    libglx0 \
+    libegl1 \
+    libxext6 \
+    libx11-6 \
+  && rm -rf /var/lib/apt/lists/*
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute
+ENV QT_X11_NO_MITSHM=1
 
+# Install stonefish library
+
+RUN apt-get update && apt-get install -y \
+    python3 python3-pip python3-venv \
+    git cmake build-essential \
+    libopencv-dev libglm-dev libsdl2-dev libfreetype6-dev doxygen \
+    libx11-dev x11-apps \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/-lSDL2 /-lSDL2/' /usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake
+
+RUN git clone https://github.com/patrykcieslak/stonefish.git /home/$USERNAME/stonefish \
+    && cd /home/$USERNAME/stonefish \
+    && mkdir build \ 
+    && cd build \
+    && cmake .. \
+    && make -j$(nproc) \
+    && make install \
+    && export LD_LIBRARY_PATH=/home/$USERNAME/stonefish/build/libStonefish.so:$LD_LIBRARY_PATH
 
 RUN mkdir -p /home/$USERNAME/ros2_ws/src
 RUN mkdir -p /home/$USERNAME/ros2_ws/src/dev_packages
@@ -67,6 +99,12 @@ RUN sudo pip3 install ds4drv
 RUN git clone https://github.com/naoki-mizuno/ds4_driver \
     --branch ${ROS_DISTRO}-devel \
     /home/$USERNAME/ros2_ws/src/dev_packages/ds4drv_driver
+
+RUN git clone https://github.com/patrykcieslak/stonefish_ros2.git \
+    /home/$USERNAME/ros2_ws/src/dev_packages/stonefish_ros2 
+    # && source /opt/ros/humble/setup.bash \
+    # && cd /home/$USERNAME/ros2_ws \
+    # && colcon build --packages-select stonefish_ros2
 
 WORKDIR /home/$USERNAME/ros2_ws/src
 
