@@ -65,7 +65,10 @@ And while using devcontainers
 
 Init submodules:
 ```bash
-git submodule update --init --recursive
+git submodule update --init --recursive \
+&& git submodule foreach git checkout main 
+&& git submodule foreach git submodule update --init --recursive \ 
+&& git submodule foreach git submodule foreach git checkout main \
 ```
 
 ### Requirements
