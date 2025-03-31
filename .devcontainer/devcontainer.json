@@ -43,7 +43,8 @@
         "--security-opt=seccomp:unconfined",
 		"--security-opt=apparmor:unconfined",
         "--privileged",
-        "--gpus", "all"
+        "--gpus", "all",
+        // "--device", "Tutaj podaj ścieżkę do swojego urządzenia"
     ],
     "containerEnv": {
         "DISPLAY": "${localEnv:DISPLAY}",

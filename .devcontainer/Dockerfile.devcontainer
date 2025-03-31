@@ -39,15 +39,19 @@ RUN apt-get update \
     iputils-ping \
     fzf \
     python3-pip\
+    # plotjuggler \
     && rm -rf /ver/lib/apt/lists/*
+
+# RUN snap install plotjuggler
 
 # Download ROS2 packages
 RUN apt-get update \
     && apt-get install -y \
-    ros-humble-joint-state-publisher \
-    ros-humble-joint-state-publisher-gui\
-    ros-humble-tf-transformations \
-    ros-humble-imu-tools
+    ros-$ROS_DISTRO-joint-state-publisher \
+    ros-$ROS_DISTRO-joint-state-publisher-gui\
+    ros-$ROS_DISTRO-tf-transformations \
+    ros-$ROS_DISTRO-imu-tools \
+    ros-$ROS_DISTRO-plotjuggler-ros
 
 USER root
 
