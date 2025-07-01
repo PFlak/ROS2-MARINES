@@ -39,6 +39,7 @@ RUN apt-get update \
     iputils-ping \
     fzf \
     python3-pip \
+    wget \
     # plotjuggler \
     && rm -rf /ver/lib/apt/lists/*
 
@@ -111,6 +112,18 @@ RUN sudo pip3 install osqp
 RUN git clone https://github.com/naoki-mizuno/ds4_driver \
     --branch ${ROS_DISTRO}-devel \
     /home/$USERNAME/ros2_ws/src/dev_packages/ds4drv_driver
+
+USER ${USERNAME}
+
+# Install ros2_control
+RUN cd /home/$USERNAME/ros2_ws/src \
+    && wget https://raw.githubusercontent.com/ros-controls/ros2_control_ci/master/ros_controls.$ROS_DISTRO.repos \
+    && vcs import dev_packages < ros_controls.$ROS_DISTRO.repos \
+    && rosdep update \
+    && sudo apt-get update \
+    && rosdep install --from-paths dev_packages --ignore-src -r -y
+
+USER root
 
 RUN git clone --single-branch https://github.com/patrykcieslak/stonefish_ros2.git \
     /home/$USERNAME/ros2_ws/src/dev_packages/stonefish_ros2 \
